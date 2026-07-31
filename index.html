@@ -1,8 +1,6 @@
 <!doctype html>
 <html lang="en">
  <head>
-  <script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260729-05-7e25993","C":{"Alfa Slab One":"YACgEYS9sJU_0","Archivo":"YAHO2-t-jNE_0","Arial":"YAGyDp9gliI_0","Canva Sans":"YAFLd8sKbwc_2","Cormorant Garamond":"YAFdJhX-538_0","Courier New":"YAGzXiGs0_8_0","Georgia":"YAGzXkO0pEM_0","Impact":"YAFcfnjI7Vk_0","Inter":"YADSwGZbFSo_0","Iowan Old Style":"YAGNIFa8j9o_0","JetBrains Mono":"YAFdJksXcAk_0","Playfair Display":"YACgEYmuCJE_0","Space Grotesk":"YAHO2sjPCSM_0","Times":"YAGzXW3gftg_0","Times New Roman":"YAGzXW3gftg_0","Trebuchet MS":"YAFcfrglpVA_0","Verdana":"YAGzXTctYtQ_0","Work Sans":"YAGXhLOKv44_0","Yellowtail":"YACgEYG4kG4_0"}}');</script>
-  <script src="/_sdk/a27874207e105461.telemetry_sdk.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buddi - NextGen Social</title>
@@ -48,69 +46,8 @@
     .bubble-modern { border-radius: 16px; padding: 12px 16px; }
     .bubble-sharp { border-radius: 4px; padding: 10px 14px; }
   </style>
-  <script src="/_sdk/6030e540d4419216.resizing_sdk.js" type="text/javascript"></script>
   <script>
-    window.dataSdk = {
-      subscribers: [],
-      async loadData() {
-        try {
-          const res = await fetch('/api/data');
-          if (res.ok) {
-            allData = await res.json();
-            this.subscribers.forEach(cb => cb(allData));
-          }
-        } catch (e) {
-          console.error('Database connection error:', e);
-        }
-      },
-      subscribe(cb) {
-        this.subscribers.push(cb);
-        this.loadData();
-        setInterval(() => this.loadData(), 3000);
-      },
-      async create(payload) {
-        try {
-          const res = await fetch('/api/data', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) return { isOk: false };
-          await this.loadData();
-          return { isOk: true };
-        } catch (e) {
-          return { isOk: false };
-        }
-      },
-      async update(payload) {
-        try {
-          const res = await fetch('/api/data', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) return { isOk: false };
-          await this.loadData();
-          return { isOk: true };
-        } catch (e) {
-          return { isOk: false };
-        }
-      },
-      async delete(payload) {
-        try {
-          const res = await fetch('/api/data', {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) return { isOk: false };
-          await this.loadData();
-          return { isOk: true };
-        } catch (e) {
-          return { isOk: false };
-        }
-      }
-    };
+    // Removed Canva dataSdk. Replace with Firebase Firestore.
   </script>
  </head>
  <body class="w-full vh-full overflow-hidden flex">
@@ -552,8 +489,8 @@
           settings_theme:'', profile_bg:'', chat_color:'', app_bg:'', status:'online' 
         };
         
-        if (window.dataSdk && window.dataSdk.create) {
-          const res = await window.dataSdk.create(payload);
+        if (/*firebase_todo*/null && /*firebase_todo*/null.create) {
+          const res = await /*firebase_todo*/null.create(payload);
           if (!res.isOk) throw new Error('DB Error');
         } else {
           payload.id = Date.now().toString();
@@ -644,8 +581,8 @@
       
       try {
         const profileDoc = allData.find(d => d.type === 'profile' && d.username === profile.username);
-        if (profileDoc && window.dataSdk && window.dataSdk.update) {
-           await window.dataSdk.update({ ...profileDoc, bio, status, avatar });
+        if (profileDoc && /*firebase_todo*/null && /*firebase_todo*/null.update) {
+           await /*firebase_todo*/null.update({ ...profileDoc, bio, status, avatar });
         }
         profile.bio = bio; profile.status = status; profile.avatar = avatar;
         
@@ -689,7 +626,7 @@
       if (mediaMsgs.length > MAX_GALLERY_ITEMS) {
         const toDelete = mediaMsgs.slice(0, PRUNE_COUNT);
         for (const m of toDelete) {
-          if (window.dataSdk && window.dataSdk.delete) await window.dataSdk.delete(m);
+          if (/*firebase_todo*/null && /*firebase_todo*/null.delete) await /*firebase_todo*/null.delete(m);
         }
         showToast(`Auto-pruned ${PRUNE_COUNT} old media items to save space.`);
       }
@@ -757,8 +694,8 @@
           timestamp:new Date().toISOString(), avatar: profile.avatar 
         };
 
-        if (window.dataSdk && window.dataSdk.create) {
-          await window.dataSdk.create(payload);
+        if (/*firebase_todo*/null && /*firebase_todo*/null.create) {
+          await /*firebase_todo*/null.create(payload);
           if (attachedFile) await enforceGalleryLimits();
         } else {
           payload.id = Date.now().toString();
@@ -793,8 +730,8 @@
             file_name: name, file_data: base64, 
             timestamp:new Date().toISOString(), avatar: profile.avatar 
           };
-          if (window.dataSdk && window.dataSdk.create) {
-            await window.dataSdk.create(payload);
+          if (/*firebase_todo*/null && /*firebase_todo*/null.create) {
+            await /*firebase_todo*/null.create(payload);
             await enforceGalleryLimits();
           } else {
             payload.id = Date.now().toString();
@@ -1081,7 +1018,7 @@
       if (!name) return;
       try {
         const payload = { type: 'group', group_name: name, members: profile ? profile.username : '' };
-        await window.dataSdk.create(payload);
+        await /*firebase_todo*/null.create(payload);
         document.getElementById('group-modal').classList.add('hidden');
         input.value = '';
         showToast(`Group #${name} created`, 'success');
@@ -1106,7 +1043,7 @@
         if (!membersList.includes(targetUser)) {
           membersList.push(targetUser);
           const updatedMembers = membersList.join(',');
-          await window.dataSdk.update({ type: 'group', group_name: activeChannel, members: updatedMembers });
+          await /*firebase_todo*/null.update({ type: 'group', group_name: activeChannel, members: updatedMembers });
           showToast(`Added ${targetUser} to ${activeChannel}`, 'success');
         } else {
           showToast(`${targetUser} is already in channel`, 'error');
@@ -1118,8 +1055,8 @@
 
     function init() {
       const storedUser = localStorage.getItem('buddi_active_user');
-      if (window.dataSdk && window.dataSdk.subscribe) {
-        window.dataSdk.subscribe(data => {
+      if (/*firebase_todo*/null && /*firebase_todo*/null.subscribe) {
+        /*firebase_todo*/null.subscribe(data => {
           allData = data || [];
           if (storedUser) {
             const found = allData.find(d => d.type === 'profile' && d.username === storedUser);
